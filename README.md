@@ -10,5 +10,5 @@ Parses currently selected text and removes newlines that aren't preceded by a fu
 
 # Usage:
  $ while clipnotify; do ~/bin/xsel-to-speech.sh; done
- - select text in PDF and leasten to the voice
+ - select text in PDF and listen to the voice
  - second select overwrite first on
