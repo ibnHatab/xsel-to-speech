@@ -9,6 +9,8 @@ Parses currently selected text and removes newlines that aren't preceded by a fu
  
  $ sudo apt install xsel
  
+ $ sudo apt-get install libxcomposite-dev libxdamage-dev libxrender-dev
+ 
  $ git clone https://github.com/cdown/clipnotify.git && cd clipnotify && make
 
 # Usage:
