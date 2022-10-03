@@ -32,22 +32,31 @@ alphabet = [
     ['Χ', 	'χ', 	'khi',],
     ['Ψ', 	'ψ', 	'psi',],
     ['Ω', 	'ω', 	'ôméga',],
+    ['Ω', 	'', 	'ôméga',],
+    ['ϕ', 	'', 	'phi',],
+    ['Σ', 	'', 	'sigma',],
+    ['∈', 	'', 	' in ',],
+    ['∞', 	'', 	' inf ',],
+    ['|', 	'', 	' giv ',],
+    ['∂', 	'', 	' di ',],
+    ['→', 	'', 	' approaches ',],
+    ['−', 	'', 	' minus ',],
 ]
 from_upper, from_lower, to = map(list, zip(*alphabet))
 
-rex = re.compile(r'[Α-ω]')
+rex = re.compile(r'[Α-ωϕΩ∈∞|∂→−]')
 
-line = u'minimising that loss with respect to θω and maximising with respect to φ.'
+line = u'minimising that loss with respect to θω and maximising with respect to φ.ϕ,Ω'
 
 def tr_greek(line):
     replacers = []
-    for start, end in [(m.start(0), m.end(0)) for m in rex.finditer(line)]:
-        for idx in range(start, end):
-            symbol = line[idx]
-            with trialContextManager(): pos = from_upper.index(symbol)
-            with trialContextManager(): pos = from_lower.index(symbol)
-            mnemonic = to[pos]
-            replacers.append((symbol, mnemonic))
+    for m in rex.finditer(line):
+        idx = m.start(0)
+        symbol = line[idx]
+        with trialContextManager(): pos = from_upper.index(symbol)
+        with trialContextManager(): pos = from_lower.index(symbol)
+        mnemonic = to[pos]
+        replacers.append((symbol, mnemonic))
 
     for symbol, mnemonic in replacers:
         line = line.replace(symbol, mnemonic)

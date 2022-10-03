@@ -17,17 +17,21 @@
 # $ while clipnotify; do ~/bin/xsel-to-speech.sh; done
 # - select text in PDF and listen to the voice
 # - second select overwrite first on
+echo "BEGIN"
+while clipnotify; do
+	SelectedText="$(xsel | grec-tr.py)"
 
-SelectedText="$(xsel | grec-tr.py)"
+	# echo "$SelectedText"
 
-ModifiedText="$(echo "$SelectedText" | \
-    sed 's/\.$/.|/g' | sed 's/-$//g' | sed 's/^\s*$/|/g' | tr '\n' ' ' | tr '|' '\n' |  iconv -f utf-8 -t ascii//TRANSLIT)"
+	ModifiedText="$(echo "$SelectedText" | \
+    					 sed 's/\.$/.|/g' | sed 's/-$//g' | sed 's/^\s*$/|/g' | tr '\n' ' ' | tr '|' '\n' |  iconv -f utf-8 -t ascii//TRANSLIT)"
 
-#   - first sed command: replace end-of-line full stops with '|' delimiter and keep original periods.
-#   - second sed command: replace empty lines with same delimiter (e.g.
-#     to separate text headings from text)
-#   - subsequent tr commands: remove existing newlines; replace delimiter with
-#     newlines
-# This is less than elegant but it works.
-killall RHVoice-client && sleep 2
-echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay &
+	#   - first sed command: replace end-of-line full stops with '|' delimiter and keep original periods.
+	#   - second sed command: replace empty lines with same delimiter (e.g.
+	#     to separate text headings from text)
+	#   - subsequent tr commands: remove existing newlines; replace delimiter with
+	#     newlines
+	# This is less than elegant but it works.
+	killall RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay) && sleep 0.5
+	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay &
+done
