@@ -24,7 +24,7 @@ while clipnotify; do
 	# echo "$SelectedText"
 
 	ModifiedText="$(echo "$SelectedText" | \
-    					 sed 's/\.$/.|/g' | sed 's/-$//g' | sed 's/^\s*$/|/g' | tr '\n' ' ' | tr '|' '\n' |  iconv -f utf-8 -t ascii//TRANSLIT)"
+    					 sed 's/\.$/.|/g' | sed 's/-$//g' | sed 's/^\s*$/|/g' | tr -d '\n' | tr '|' '\n' |  iconv -f utf-8 -t ascii//TRANSLIT)"
 
 	#   - first sed command: replace end-of-line full stops with '|' delimiter and keep original periods.
 	#   - second sed command: replace empty lines with same delimiter (e.g.
