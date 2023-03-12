@@ -22,6 +22,9 @@ while clipnotify; do
 	SelectedText="$(xsel | grec-tr.py)"
 
 	# echo "$SelectedText"
+	if (xdotool getwindowfocus  getwindowname | grep -e 'Code\|emacs') ; then
+		continue
+	fi
 
 	ModifiedText="$(echo "$SelectedText" | \
     					 sed 's/\.$/.|/g' | sed 's/-$//g' | sed 's/^\s*$/|/g' | tr -d '\n' | tr '|' '\n' |  iconv -f utf-8 -t ascii//TRANSLIT)"
