@@ -20,9 +20,13 @@
 echo "BEGIN"
 while clipnotify; do
 	SelectedText="$(xsel | grec-tr.py)"
+	#SelectedText="$(xsel)"
 
 	# echo "$SelectedText"
-	if (xdotool getwindowfocus  getwindowname | grep -e 'Code\|emacs') ; then
+	window_name=$(xdotool getwindowfocus  getwindowname)
+	#echo ">> $window_name"
+	if (xdotool getwindowfocus  getwindowname | grep -e 'Visual Studio Code\|emacs') ; then
+		echo ">> skip $window_name"
 		continue
 	fi
 
@@ -35,6 +39,6 @@ while clipnotify; do
 	#   - subsequent tr commands: remove existing newlines; replace delimiter with
 	#     newlines
 	# This is less than elegant but it works.
-	killall RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay) && sleep 0.5
-	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay &
+	killall -q RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay -q) && sleep 0.5
+	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.3 -v -0.1| aplay -q &
 done
