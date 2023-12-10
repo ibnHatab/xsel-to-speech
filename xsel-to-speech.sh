@@ -35,6 +35,6 @@ while clipnotify; do
 	#   - subsequent tr commands: remove existing newlines; replace delimiter with
 	#     newlines
 	# This is less than elegant but it works.
-	killall RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay) && sleep 0.5
-	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay &
+	killall -q RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay) && sleep 0.5
+	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay -q &
 done
