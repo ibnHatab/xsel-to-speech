@@ -18,9 +18,16 @@
 # - select text in PDF and listen to the voice
 # - second select overwrite first on
 echo "BEGIN"
+tts_client="MeloTTS"
+tts_client="RHVoice"
+
+if [ "$tts_client" = "MeloTTS" ]; then
+	conda activate melo
+fi
+
 while clipnotify; do
-	SelectedText="$(xsel | grec-tr.py)"
-	#SelectedText="$(xsel)"
+	#SelectedText="$(xsel | grec-tr.py)"
+	SelectedText="$(xsel)"
 
 	# echo "$SelectedText"
 	window_name=$(xdotool getwindowfocus  getwindowname)
@@ -39,6 +46,11 @@ while clipnotify; do
 	#   - subsequent tr commands: remove existing newlines; replace delimiter with
 	#     newlines
 	# This is less than elegant but it works.
-	killall -q RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay -q) && sleep 0.5
-	echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.3 -v -0.1| aplay -q &
+	if [ "$tts_client" = "RHVoice" ]; then
+		killall -q RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay -q) && sleep 0.5
+		echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.3 -v -0.1| aplay -q &
+	elif [ "$tts_client" = "MeloTTS" ]; then
+		pkill -9 -f melo_client.py && sleep 1.5 && (echo 'break' | melo_client.py ) && sleep 0.5
+		echo "$ModifiedText" | melo_client.py &
+	fi
 done
