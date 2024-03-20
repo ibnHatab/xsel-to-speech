@@ -18,7 +18,10 @@
 # - select text in PDF and listen to the voice
 # - second select overwrite first on
 echo "BEGIN"
-tts_client="MeloTTS"
+
+# MeloTTS is a high-quality multi-lingual text-to-speech library by MyShell.ai.
+## tts_client="MeloTTS"
+# RHVoice is a free and open-source multilingual speech synthesizer.
 tts_client="RHVoice"
 
 if [ "$tts_client" = "MeloTTS" ]; then
@@ -26,12 +29,12 @@ if [ "$tts_client" = "MeloTTS" ]; then
 fi
 
 while clipnotify; do
-	#SelectedText="$(xsel | grec-tr.py)"
-	SelectedText="$(xsel)"
+	SelectedText="$(xsel | grec-tr.py)"
+	#SelectedText="$(xsel)"
 
-	# echo "$SelectedText"
+	# echo "DBG >> $SelectedText"
 	window_name=$(xdotool getwindowfocus  getwindowname)
-	#echo ">> $window_name"
+	#echo "DBG >> $window_name"
 	if (xdotool getwindowfocus  getwindowname | grep -e 'Visual Studio Code\|emacs') ; then
 		echo ">> skip $window_name"
 		continue
