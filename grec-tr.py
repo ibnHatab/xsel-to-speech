@@ -1,47 +1,49 @@
 #!/usr/bin/python
-#coding=utf-8
+# coding=utf-8
 
 import re
 import sys
+
 
 class trialContextManager:
     def __enter__(self): pass
     def __exit__(self, *args): return True
 
+
 alphabet = [
-    ['Α', 	'α', 	'alpha',],
-    ['Β', 	'β', 	'bêta',],
-    ['Γ', 	'γ', 	'gamma',],
-    ['Δ', 	'δ', 	'delta',],
-    ['Ε', 	'ε', 	'epsilon',],
-    ['Ζ', 	'ζ', 	'zêta',],
-    ['Η', 	'η', 	'êta',],
-    ['Θ', 	'θ',  	'thêta',],
-    ['Ι', 	'ι', 	'iota',],
-    ['Κ', 	'κ', 	'kappa',],
-    ['Λ', 	'λ', 	'lambda',],
-    ['Μ', 	'μ', 	'mu',],
-    ['Ν', 	'ν', 	'nu',],
-    ['Ξ', 	'ξ', 	'xi',],
-    ['Ο', 	'ο', 	'omicron',],
-    ['Π', 	'π', 	'pi',],
-    ['Ρ', 	'ρ', 	'rhô',],
-    ['Σ', 	'σ', 	'sigma',],
-    ['Τ', 	'τ', 	'tau',],
-    ['Υ', 	'υ', 	'upsilon',],
-    ['Φ', 	'φ', 	'phi',],
-    ['Χ', 	'χ', 	'khi',],
-    ['Ψ', 	'ψ', 	'psi',],
-    ['Ω', 	'ω', 	'ôméga',],
-    ['Ω', 	'', 	'ôméga',],
-    ['ϕ', 	'', 	'phi',],
-    ['Σ', 	'', 	'sigma',],
-    ['∈', 	'', 	' in ',],
-    ['∞', 	'', 	' inf ',],
-    ['|', 	'', 	' giv ',],
-    ['∂', 	'', 	' di ',],
-    ['→', 	'', 	' approaches ',],
-    ['−', 	'', 	' minus ',],
+    ['Α', 	'α', 	'alpha',        ],
+    ['Β', 	'β', 	'bêta',         ],
+    ['Γ', 	'γ', 	'gamma',        ],
+    ['Δ', 	'δ', 	'delta',        ],
+    ['Ε', 	'ε', 	'epsilon',      ],
+    ['Ζ', 	'ζ', 	'zêta',         ],
+    ['Η', 	'η', 	'êta',          ],
+    ['Θ', 	'θ',  	'thêta',        ],
+    ['Ι', 	'ι', 	'iota',         ],
+    ['Κ', 	'κ', 	'kappa',        ],
+    ['Λ', 	'λ', 	'lambda',       ],
+    ['Μ', 	'μ', 	'mu',           ],
+    ['Ν', 	'ν', 	'nu',           ],
+    ['Ξ', 	'ξ', 	'xi',           ],
+    ['Ο', 	'ο', 	'omicron',      ],
+    ['Π', 	'π', 	'pi',           ],
+    ['Ρ', 	'ρ', 	'rhô',          ],
+    ['Σ', 	'σ', 	'sigma',        ],
+    ['Τ', 	'τ', 	'tau',          ],
+    ['Υ', 	'υ', 	'upsilon',      ],
+    ['Φ', 	'φ', 	'phi',          ],
+    ['Χ', 	'χ', 	'khi',          ],
+    ['Ψ', 	'ψ', 	'psi',          ],
+    ['Ω', 	'ω', 	'ôméga',        ],
+    ['Ω', 	'', 	'ôméga',        ],
+    ['ϕ', 	'', 	'phi',          ],
+    ['Σ', 	'', 	'sigma',        ],
+    ['∈', 	'', 	' in ',         ],
+    ['∞', 	'', 	' inf ',        ],
+    ['|', 	'', 	' giv ',        ],
+    ['∂', 	'', 	' di ',         ],
+    ['→', 	'', 	' approaches ', ],
+    ['−', 	'', 	' minus ',      ],
 ]
 from_upper, from_lower, to = map(list, zip(*alphabet))
 
@@ -54,10 +56,14 @@ def tr_greek(line):
     for m in rex.finditer(line):
         idx = m.start(0)
         symbol = line[idx]
-        with trialContextManager(): pos = from_upper.index(symbol)
-        with trialContextManager(): pos = from_lower.index(symbol)
-        mnemonic = to[pos]
-        replacers.append((symbol, mnemonic))
+        pos = None
+        with trialContextManager():
+            pos = from_upper.index(symbol)
+        with trialContextManager():
+            pos = from_lower.index(symbol)
+        if pos:
+            mnemonic = to[pos]
+            replacers.append((symbol, mnemonic))
 
     for symbol, mnemonic in replacers:
         line = line.replace(symbol, mnemonic)
