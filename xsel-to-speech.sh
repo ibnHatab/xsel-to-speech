@@ -34,9 +34,16 @@ while clipnotify; do
 
 	# echo "DBG >> $SelectedText"
 	window_name=$(xdotool getwindowfocus  getwindowname)
-	#echo "DBG >> $window_name"
+#	echo "DBG >> $window_name"
+#	ps -hp $(xdotool getwindowfocus getwindowpid) 
+	
 	if (xdotool getwindowfocus  getwindowname | grep -e 'Visual Studio Code\|emacs') ; then
 		echo ">> skip $window_name"
+		continue
+	fi
+
+	if (ps -hp $(xdotool getwindowfocus getwindowpid) | egrep 'terminator') ; then
+		echo ">> skip pid $window_name"
 		continue
 	fi
 
