@@ -32,9 +32,9 @@ Set in the header of `xsel-to-speech.sh`, or override from the environment.
 | Variable | Default | Purpose |
 |---|---|---|
 | `XSEL_TTS_BACKEND` | `paradee` | `paradee` or `rhvoice`. The script's first argument overrides it |
-| `XSEL_SPEED_PCT` | `140` | Reading speed in percent, where 100 is the backend's normal speed |
+| `XSEL_SPEED_PCT` | `120` | Reading speed in percent, where 100 is the backend's normal speed |
 | `XSEL_SKIP_TITLES` | `Visual Studio Code\|emacs` | Stay silent when the focused window's title matches this regex |
-| `XSEL_SKIP_PROCESSES` | `terminator` | Stay silent when the focused window's `ps` line matches this regex |
+| `XSEL_SKIP_PROCESSES` | empty | Stay silent when the focused window's `ps` line matches this regex |
 | `XSEL_HOME` | the script's real directory | Repo location |
 | `XSEL_VENV` | `$XSEL_HOME/.venv` | Paradee's environment. Set it for `install` too |
 | `PARADEE_VOICE` | `af_heart` | Also `am_puck`, `bf_isabella` or `bm_fable` |
@@ -70,7 +70,7 @@ Paradee takes over a second to load, too slow to repeat for every selection, so 
 
 systemd owns the socket and starts the service on the first connection. That first request waits about a second while the model loads, and later ones return in about 40 ms. The loaded service uses about 440 MB of memory. After 30 idle minutes it exits and frees that memory, and the socket stays ready. Change `PARADEE_IDLE_SECS` in `systemd/paradee-tts.service.in` to adjust this. Only your user can open the socket.
 
-A request is one line with the speed and voice, then the text. socat closes its sending side at the end of input, which tells the server the request is complete, and keeps reading the audio. An invalid request closes the connection with no data, and the reason goes to the journal. The server handles one connection at a time.
+A request is one line with the speed and voice, then the text, so changing the speed needs no service restart. socat closes its sending side at the end of input, which tells the server the request is complete, and keeps reading the audio. An invalid request closes the connection with no data, and the reason goes to the journal. The server handles one connection at a time.
 
 A new selection kills `aplay`, which stops the sound at once. socat then fails on its next write and exits, and the server stops generating when the connection closes.
 
