@@ -20,7 +20,7 @@ XSEL_VENV="${XSEL_VENV:-$XSEL_HOME/.venv}"
 XSEL_TTS_BACKEND="${1:-${XSEL_TTS_BACKEND:-paradee}}"
 # Reading speed in percent. 100 is the backend's normal speed.
 # 140 is about 250 words per minute on both backends; 120 is about 193 on Paradee, 222 on RHVoice.
-XSEL_SPEED_PCT="${XSEL_SPEED_PCT:-120}"
+XSEL_SPEED_PCT="${XSEL_SPEED_PCT:-130}"
 # Stay silent in these windows. Extended regexes, matched against the focused
 # window's title and against its `ps` line. Set one empty to turn that check off.
 XSEL_SKIP_TITLES="${XSEL_SKIP_TITLES-Visual Studio Code|emacs}"
