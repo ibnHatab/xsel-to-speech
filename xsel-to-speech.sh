@@ -22,7 +22,19 @@ echo "BEGIN"
 # MeloTTS is a high-quality multi-lingual text-to-speech library by MyShell.ai.
 ## tts_client="MeloTTS"
 # RHVoice is a free and open-source multilingual speech synthesizer.
-tts_client="RHVoice"
+# Paradee is an 8M-parameter model distilled from Kokoro. Runs on CPU from a local .venv.
+tts_client="${XSEL_TTS_CLIENT:-Paradee}"
+
+if [ "$tts_client" = "Paradee" ]; then
+	repo_dir="$(dirname "$(readlink -f "$0")")"
+	export VIRTUAL_ENV="${XSEL_TTS_VENV:-$repo_dir/.venv}"
+	export PATH="$VIRTUAL_ENV/bin:$PATH"
+	export PARADEE_VOICE="${PARADEE_VOICE:-af_heart}"
+	export PARADEE_SPEED="${PARADEE_SPEED:-1.0}"
+	# The model is cached at install time; don't call the HF Hub on every selection.
+	export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
+	paradee_client="$repo_dir/paradee_client.py"
+fi
 
 if [ "$tts_client" = "MeloTTS" ]; then
 	conda activate melo
@@ -59,6 +71,9 @@ while clipnotify; do
 	if [ "$tts_client" = "RHVoice" ]; then
 		killall -q RHVoice-client  && sleep 1.5 && (echo 'break' | RHVoice-client -s  SLT -r 0.4 -v -0.1| aplay -q) && sleep 0.5
 		echo "$ModifiedText" | RHVoice-client -s  SLT -r 0.3 -v -0.1| aplay -q &
+	elif [ "$tts_client" = "Paradee" ]; then
+		pkill -f "^python $paradee_client" && sleep 1.5 && (echo 'break' | "$paradee_client" | aplay -q) && sleep 0.5
+		echo "$ModifiedText" | "$paradee_client" | aplay -q &
 	elif [ "$tts_client" = "MeloTTS" ]; then
 		pkill -9 -f melo_client.py && sleep 1.5 && (echo 'break' | melo_client.py ) && sleep 0.5
 		echo "$ModifiedText" | melo_client.py &
