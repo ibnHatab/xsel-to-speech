@@ -44,10 +44,13 @@ alphabet = [
     ['∂', 	'', 	' di ',         ],
     ['→', 	'', 	' approaches ', ],
     ['−', 	'', 	' minus ',      ],
+    ['§', 	'', 	' para ',       ],
+    ['∇', 	'', 	' gradient ',   ],
+    ['⋅', 	'', 	' times ',      ],
 ]
 from_upper, from_lower, to = map(list, zip(*alphabet))
 
-rex = re.compile(r'[Α-ωϕΩ∈∞|∂→−]')
+rex = re.compile(r'[Α-ωϕΩ∈∞|∂→−§∇⋅]')
 
 line = u'minimising that loss with respect to θω and maximising with respect to φ.ϕ,Ω'
 
@@ -61,7 +64,7 @@ def tr_greek(line):
             pos = from_upper.index(symbol)
         with trialContextManager():
             pos = from_lower.index(symbol)
-        if pos:
+        if pos is not None:
             mnemonic = to[pos]
             replacers.append((symbol, mnemonic))
 

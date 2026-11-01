@@ -25,15 +25,18 @@ echo "BEGIN"
 # Paradee is an 8M-parameter model distilled from Kokoro. Runs on CPU from a local .venv.
 tts_client="${XSEL_TTS_CLIENT:-Paradee}"
 
+# Repo location. Resolves symlinks, so ~/bin/xsel-to-speech.sh -> /opt/... works.
+XSEL_HOME="${XSEL_HOME:-$(dirname "$(readlink -f "$0")")}"
+
 if [ "$tts_client" = "Paradee" ]; then
-	repo_dir="$(dirname "$(readlink -f "$0")")"
-	export VIRTUAL_ENV="${XSEL_TTS_VENV:-$repo_dir/.venv}"
+	export VIRTUAL_ENV="${XSEL_TTS_VENV:-$XSEL_HOME/.venv}"
 	export PATH="$VIRTUAL_ENV/bin:$PATH"
 	export PARADEE_VOICE="${PARADEE_VOICE:-af_heart}"
-	export PARADEE_SPEED="${PARADEE_SPEED:-1.0}"
+	# A speed multiplier, unlike RHVoice's -r: 1.4 matches `RHVoice-client -r 0.3` (about 250 wpm).
+	export PARADEE_SPEED="${PARADEE_SPEED:-1.4}"
 	# The model is cached at install time; don't call the HF Hub on every selection.
 	export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
-	paradee_client="$repo_dir/paradee_client.py"
+	paradee_client="$XSEL_HOME/paradee_client.py"
 fi
 
 if [ "$tts_client" = "MeloTTS" ]; then
@@ -41,7 +44,7 @@ if [ "$tts_client" = "MeloTTS" ]; then
 fi
 
 while clipnotify; do
-	SelectedText="$(xsel | grec-tr.py)"
+	SelectedText="$(xsel | "$XSEL_HOME/grec-tr.py")"
 	#SelectedText="$(xsel)"
 
 	# echo "DBG >> $SelectedText"

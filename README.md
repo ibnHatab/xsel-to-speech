@@ -28,7 +28,8 @@ Parses currently selected text and removes newlines that aren't preceded by a fu
  - second select overwrite first on
 
 # Environment
+ - XSEL_HOME: repo location (default: the script's real directory, through symlinks)
  - XSEL_TTS_CLIENT: Paradee (default), RHVoice or MeloTTS
- - XSEL_TTS_VENV: Paradee virtualenv (default: .venv next to the script)
+ - XSEL_TTS_VENV: Paradee virtualenv (default: $XSEL_HOME/.venv)
  - PARADEE_VOICE: af_heart (default), am_puck, bf_isabella or bm_fable
- - PARADEE_SPEED: default 1.0, higher is faster
+ - PARADEE_SPEED: multiplier, default 1.4 (about 250 wpm, same as RHVoice -r 0.3); below 1 is slower
