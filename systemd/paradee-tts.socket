@@ -1,0 +1,10 @@
+[Unit]
+Description=Paradee text-to-speech socket
+
+[Socket]
+ListenStream=%t/paradee-tts.sock
+SocketMode=0600
+RemoveOnStop=true
+
+[Install]
+WantedBy=sockets.target

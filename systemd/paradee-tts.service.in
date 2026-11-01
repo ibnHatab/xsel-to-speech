@@ -1,0 +1,8 @@
+[Unit]
+Description=Paradee text-to-speech service
+Requires=paradee-tts.socket
+
+[Service]
+ExecStart=@XSEL_VENV@/bin/python @XSEL_HOME@/paradee_server.py
+Environment=HF_HUB_OFFLINE=1
+Environment=PARADEE_IDLE_SECS=1800
